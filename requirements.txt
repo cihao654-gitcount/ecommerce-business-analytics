@@ -1,0 +1,18 @@
+# Data processing
+pandas
+numpy
+
+# Data visualization
+matplotlib
+seaborn
+
+# Database connection
+sqlalchemy
+pymysql
+
+# Jupyter environment
+jupyter
+ipykernel
+
+# Environment configuration
+python-dotenv
