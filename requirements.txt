@@ -1,6 +1,7 @@
 # Data processing
 pandas
 numpy
+openpyxl==3.1.5
 
 # Data visualization
 matplotlib
