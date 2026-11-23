@@ -1,126 +1,48 @@
-# E-commerce Business Analytics
+# 电商复购分析：哪款午餐袋值得先做提醒测试？
 
-An end-to-end e-commerce business analytics project using SQL, Python, pandas, and Power BI.
+三款候选午餐袋的复购率都在 51% 左右。RED RETROSPOT 有 272 名可识别客户在观察期内再次购买，比 SUKI DESIGN 多 50 人。两款商品的前五大客户销量占比只差 0.68 个百分点。因此，这份报告建议先拿 RED 做小规模提醒测试。提醒到底能带来多少额外购买，还要靠对照组来判断。
 
-**Project Status:** In Progress
+[阅读业务报告](reports/business_analysis_report.md) · [查看两页看板（PDF）](dashboards/ecommerce_sales_analysis.pdf) · [打开 Power BI 文件](dashboards/ecommerce_sales_analysis.pbix)
 
-## 1. Project Overview
+## 数据和口径
 
-This project aims to analyze e-commerce business data to identify sales trends, understand customer purchasing behavior, evaluate customer retention, and discover potential business improvement opportunities.
+这是基于公开交易记录的个人作品集项目。Daqing Chen 的 *Online Retail II* 收录了一家英国网络零售商从 2009 年 12 月 1 日到 2011 年 12 月 9 日的交易。本项目取其中 12 个完整月（2010 年 12 月至 2011 年 11 月）。两张工作表有九天重叠，入库时保留来源，分析时只取其中一份。商品交易金额按数量乘单价计算，未扣除后续退款。[UCI 原始数据](https://archive.ics.uci.edu/dataset/502/online+retail+ii) · [CC BY 4.0 许可](https://creativecommons.org/licenses/by/4.0/) · [清洗规则](docs/cleaning_rules.md)
 
-The project covers the complete data analytics workflow, from data extraction and cleaning to business analysis, visualization, and reporting.
+几项容易混淆的数字：
 
-## 2. Business Objectives
+- **18,957 张发票**覆盖 3,797 款商品。全店正向商品交易金额为 **9,655,939.79 英镑**。
+- **复购**按同一客户、同一商品的不同发票计数。RED 有 524 名可识别购买客户，其中 272 人至少买过两次，复购率为 51.91%。
+- **19.55%** 是 RED 前五大客户占已识别销量的比例。还有 1,616 件销量缺客户编号，实际买家未知。[指标定义与对账](docs/metric_definitions.md)
 
-The main objectives of this project are:
+## 从哪里看计算过程
 
-- Analyze sales performance and order trends.
-- Understand customer purchasing behavior.
-- Evaluate customer retention and repeat purchase patterns.
-- Identify potential factors affecting business performance.
-- Develop data-driven business recommendations.
+MySQL 负责存储交易明细、处理跨表重叠和计算经营指标。Python 和 pandas 用来核对客户购买次数、集中度和缺失编号的影响。Power BI 第一页可以按国家看全店交易，第二页比较三款候选商品。脚本、笔记本和结果文件的位置见[项目目录](docs/PROJECT_STRUCTURE.md)。
 
-## 3. Dataset
+## 在 Windows 上查看原始数据
 
-
-- Dataset Source: Online Retail II
-- Data Coverage: 2009-12-01 至 2011-12-09
-- Data License: CC BY 4.0（知识共享署名 4.0 国际）
-- Data Format: 	Excel 工作簿（.xlsx）/online_retail_II.xlsx/Year 2009-2010,Year 2010-2011
-- Official Source: [Online Retail II — UCI Machine Learning Repository](https://archive.ics.uci.edu/dataset/502/online+retail+ii)
-- License Requirements: 按照 [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) 使用及分享数据时，需要适当署名、提供许可证链接，并注明是否对数据进行了修改。
-## 4. Technology Stack
-
-| Technology | Purpose |
-|---|---|
-| MySQL | Data storage and SQL analysis |
-| Python 3.12 | Data processing and analysis |
-| pandas | Data cleaning and manipulation |
-| NumPy | Numerical computation |
-| Jupyter Notebook | Exploratory Data Analysis |
-| Matplotlib / Seaborn | Data visualization |
-| Power BI | Business intelligence dashboards |
-| Git / GitHub | Version control and project management |
-
-## 5. Project Workflow
-
-1. Business Understanding
-2. Data Collection and Database Design
-3. Data Cleaning and Quality Validation
-4. SQL-Based Data Analysis
-5. Exploratory Data Analysis (EDA)
-6. Business Metrics Analysis
-7. Power BI Dashboard Development
-8. Business Insights and Recommendations
-
-## 6. Project Structure
-
-```text
-ecommerce-business-analytics/
-├── data/
-│   ├── raw/
-│   └── processed/
-├── sql/
-├── notebooks/
-├── src/
-├── reports/
-│   └── figures/
-├── dashboards/
-├── docs/
-├── README.md
-├── requirements.txt
-└── .gitignore
-```
-
-## 7. Key Findings
-
-To be completed after the analysis.
-
-## 8. Business Recommendations
-
-To be completed after validating the analytical findings.
-
-## 9. How to Run
-
-当前可运行内容为 `notebooks/01_data_overview.ipynb`：读取两个工作表、查看字段与样例，并统计客户编号缺失的明细行数和比例。SQL 分析和 Power BI 看板将在后续阶段补充。
-
-### 9.1 准备 Python 环境
-
-当前项目使用 Windows 和 Python 3.12.10。以下命令均在项目根目录（包含 `README.md` 和 `requirements.txt` 的文件夹）的 PowerShell 终端中执行。
-
-如果尚未创建虚拟环境，在安装 Python 3.12 后执行；已有可用 `.venv` 时跳过：
+项目开发环境为 Python 3.12.10。下面的命令在项目根目录运行。已有虚拟环境时，从安装依赖开始。依赖清单只锁定了部分版本，整套项目的空库复现仍待验证。
 
 ```powershell
 py -3.12 -m venv .venv
 ```
 
-首次准备环境或依赖清单变更时，使用项目解释器安装依赖：
-
 ```powershell
 .\.venv\Scripts\python.exe -m pip install -r requirements.txt
 ```
 
-上述命令不需要先激活虚拟环境。`openpyxl` 用于读取本项目的 Excel 文件。当前依赖清单尚未全部固定版本，因此不能保证未来重新安装时得到完全一致的环境；新环境完整复现仍待验收。
-
-### 9.2 准备原始数据
-
-从第 3 节的 UCI 官方链接下载 Online Retail II，解压后将工作簿保存到：
+从上面的 UCI 页面下载并解压工作簿，保留 Excel 格式，放在：
 
 ```text
 data/raw/online_retail_II.xlsx
 ```
 
-保留原始 Excel 格式与文件内容，不要通过修改扩展名将其当作 CSV。工作簿应包含 `Year 2009-2010` 和 `Year 2010-2011` 两个工作表。原始数据目录已设置 Git 忽略规则，取得代码后需要另行准备数据。
-
-### 9.3 打开 Notebook 并核对运行位置
-
-可以在 PyCharm 中打开项目和 `notebooks/01_data_overview.ipynb`，将 Notebook 内核关联到项目的 `.venv/Scripts/python.exe`。也可以在项目根目录运行以下命令，通过浏览器打开该 Notebook：
+在 PyCharm 中打开 [01_data_overview.ipynb](notebooks/01_data_overview.ipynb)，选择项目的 `.venv` 内核，也可以从终端启动 Jupyter：
 
 ```powershell
 .\.venv\Scripts\python.exe -m notebook
 ```
 
-选择项目虚拟环境对应的 Python 内核。先重启内核（暂不运行全部单元），再在一个临时代码单元中执行：
+重启内核后，先确认解释器和工作目录：
 
 ```python
 import sys
@@ -130,29 +52,11 @@ print(sys.executable)
 print(Path.cwd())
 ```
 
-解释器应指向本项目的 `.venv`。当前读取代码使用 `./data/raw/...`，因此运行工作目录必须是项目根目录；相对路径以工作目录为基准，并非始终以 Notebook 文件所在目录为基准。
-
-如果输出已经是项目根目录，无需调整。如果输出是项目内的 `notebooks` 文件夹，在临时单元执行 `%cd ..` 回到上一级，再次检查目录。如果输出是其他位置，先核对项目与 Jupyter 启动配置，不要直接套用 `%cd ..`。
-
-### 9.4 顺序运行与核对结果
-
-确认内核和工作目录后，执行“运行全部单元”（Run All），等待完成并保存 Notebook。此时不要再次重启内核；以后重启时，应重新核对工作目录。
-
-预期所有代码单元无报错，两个工作表各有 8 个字段，并得到以下原始数据初查结果：
+输入文件的相对路径从项目根目录起算。如果当前目录恰好是 `notebooks`，运行 `%cd ..` 即可回到根目录。找不到文件先检查位置，导入模块报错先检查内核。确认后从头运行所有单元，两张工作表应各有 8 列，行数如下。
 
 | 工作表 | 明细行数 | Customer ID 缺失明细行数 | 缺失明细行占比 |
 |---|---:|---:|---:|
 | Year 2009-2010 | 525,461 | 107,927 | 20.5395% |
 | Year 2010-2011 | 541,910 | 135,080 | 24.9266% |
 
-以上均为原始明细行统计，缺失明细行数不等于缺失客户人数。两张表尚未合并、清洗或去重。
-
-若提示文件不存在，先检查工作目录、文件名和数据位置；若提示缺少模块，先核对 Notebook 使用的解释器是否为项目虚拟环境，再检查依赖安装情况。
-
-## 10. Limitations
-
-Dataset limitations, analytical assumptions, and potential biases will be documented after data validation.
-
-## 11. Author
-
-Personal data analytics portfolio project.
+这里数的是明细行。同一个客户可以有多行交易，无法从缺编号的行数倒推出缺了多少位客户。

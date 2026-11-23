@@ -1,63 +1,14 @@
-# Project Structure Guide
+# 项目文件放在哪里
 
-项目目录结构说明文档，用于记录各文件夹和核心配置文件的用途。
+看分析结论，从 [业务报告](../reports/business_analysis_report.md) 开始。想核对某个数字，则从对应的 SQL 或 Notebook 入手。
 
-## 1. Directory Structure
-
-```text
-ecommerce-business-analytics/
-│
-├── data/
-│   ├── raw/
-│   └── processed/
-│
-├── sql/
-├── notebooks/
-├── src/
-│
-├── reports/
-│   └── figures/
-│
-├── dashboards/
-├── docs/
-│
-├── README.md
-├── requirements.txt
-└── .gitignore
-```
-
-## 2. Directory Description
-
-| Directory | Description |
+| 想找什么 | 去哪里 |
 |---|---|
-| data/raw/ | 存放从公开数据源获取的原始数据，原则上不直接修改 |
-| data/processed/ | 存放经过清洗、转换和处理后的数据 |
-| sql/ | 存放 MySQL 建表语句、数据处理 SQL 和业务分析查询 |
-| notebooks/ | 存放 Jupyter Notebook，用于探索性数据分析（EDA）和统计分析 |
-| src/ | 存放正式的 Python 项目代码和可复用的数据处理模块 |
-| reports/ | 存放最终业务分析报告 |
-| reports/figures/ | 存放分析过程中生成的图表和可视化图片 |
-| dashboards/ | 存放 Power BI 仪表板文件（.pbix）及相关成果 |
-| docs/ | 存放项目设计文档、数据字典、指标定义和技术说明 |
+| 原始交易与导入 | 两张原表都在本地工作簿 `data/raw/online_retail_II.xlsx`。表结构见 [01_create_raw_table.sql](../sql/01_create_raw_table.sql)，导入程序见 [import_raw_data.py](../src/import_raw_data.py)。每行保留工作表名称和原始行号。 |
+| 为什么保留或排除某条记录 | [数据质量检查](data_quality_report.md) 有异常样例和行号。[清洗规则](cleaning_rules.md) 记录最终取舍，[05_create_sales_view.sql](../sql/05_create_sales_view.sql) 是数据库实际使用的筛选逻辑。 |
+| 经营指标 | [06_product_metrics.sql](../sql/06_product_metrics.sql) 按商品汇总数量、金额、发票数，也统计各国客户数。[指标定义](metric_definitions.md) 列出分母和对账值。 |
+| 三款午餐袋是怎么选出来的 | [购买频次](../notebooks/03_customer_purchase_frequency.ipynb)、[客户集中度](../notebooks/04_customer_concentration.ipynb)、[缺失编号情景](../notebooks/05_robustness_checks.ipynb)。汇总数据放在 `data/processed/`。 |
+| 报告和图表 | `reports/` 放报告，`reports/figures/` 留给报告插图。`dashboards/` 里有可交互的 Power BI 文件和可以直接阅读的 [PDF](../dashboards/ecommerce_sales_analysis.pdf)。 |
+| 学习过程 | [启动时的 15 天安排](original_15_day_plan.md) 和 [Day 7 评估](day07_assessment.md) 单独保留，方便回看当时的任务和独立完成情况。 |
 
-## 3. Important File Description
-
-| File | Description |
-|---|---|
-| README.md | 项目主页，介绍业务背景、技术栈、分析过程和项目成果 |
-| requirements.txt | 记录 Python 项目依赖的第三方库及版本 |
-| .gitignore | 配置 Git 忽略规则，避免上传缓存、虚拟环境和敏感文件 |
-| .gitkeep | 占位文件，用于让 Git 保留尚无其他文件的空目录 |
-
-## 4. Development Principles
-
-1. 原始数据与处理后的数据分开存放。
-2. SQL 查询和 Python 核心代码分开管理。
-3. 探索性分析与正式业务代码分开管理。
-4. 分析结果必须能够追溯到对应的数据和计算过程。
-5. 不上传数据库密码、API 密钥及其他敏感信息。
-6. 重要代码、文档和分析成果统一使用 Git 进行版本管理。
-
-## 5. Maintenance
-
-当项目目录结构发生变化时，应同步更新本文档，确保项目结构与实际文件保持一致。
+根目录的 [README](../README.md) 是项目入口，[requirements.txt](../requirements.txt) 列出 Python 依赖。数据库连接信息放在本地 `.env`，由 `.gitignore` 排除。空目录里的 `.gitkeep` 只是 Git 占位文件。
